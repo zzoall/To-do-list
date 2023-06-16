@@ -19,13 +19,16 @@ function deleteTodo(event) {
     // parentElement는 부모element를 알려줌(button의 부모는 li)
     const li = event.target.parentElement
     li.remove();
+    toDos = toDos.filter((toDo) => toDo.id !== parseInt(li.id)); 
+    saveToDos();
 }
 
 
 function paintToDo(newTodo) {
     const li = document.createElement("li");
+    li.id = newTodo.id
     const span = document.createElement("span");
-    span.innerText = newTodo; // 사용자가 입력한 newTodo
+    span.innerText = newTodo.text; // 사용자가 입력한 newTodo
     const button = document.createElement("button");
     button.innerText = "X"
     button.addEventListener("click", deleteTodo)
@@ -39,9 +42,13 @@ function handleToDoSubmit(event) {
     event.preventDefault();
     const newTodo = toDoInput.value; // newTodo라는 변수에 input값 복사하고
     toDoInput.value = ""; // enter 누르면 새로고침되어 입력한 글은 빈칸으로 채움.
+    const newToDoObj = {
+        text: newTodo,
+        id: Date.now(),
+    };
     // newTodo를 array에 저장하고 화면에 띄우고나서 로컬스토리지에 저장(saving 해줘야함.)
-    toDos.push(newTodo);
-    paintToDo(newTodo);
+    toDos.push(newToDoObj);
+    paintToDo(newToDoObj);
     saveToDos();
 }
 
